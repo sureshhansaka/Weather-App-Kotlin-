@@ -86,4 +86,6 @@
         android:paddingEnd="16dp"
         android:id="@+id/forcast"/>
 
+
+
 </LinearLayout>
