@@ -17,6 +17,16 @@
         android:fontFamily="serif"
         android:gravity="center"/>
 
+    <Button
+        android:layout_width="148dp"
+        android:layout_height="37dp"
+        android:text="FIND WEATHER"
+        android:textColor="@color/textColor"
+        android:id="@+id/btnFindWeather"
+        android:layout_marginLeft="269dp"
+        android:background="@color/textColor"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -24,8 +34,7 @@
         android:gravity="center"
         android:text="jaffna"
         android:textColor="@color/textColor"
-        android:textSize="30dp"
-        android:layout_marginTop="25dp"/>
+        android:textSize="30dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -85,7 +94,5 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:id="@+id/forcast"/>
-
-
 
 </LinearLayout>

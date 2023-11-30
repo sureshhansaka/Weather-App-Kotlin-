@@ -2,6 +2,7 @@ package com.example.weatherappproject
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -25,6 +26,7 @@ import java.net.URL
 
 import android.location.Address
 import android.location.Geocoder
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -47,7 +49,7 @@ class CurrentLoationWeather : AppCompatActivity() {
 
     private var currentLocation : Location? = null
 
-
+    private lateinit var button : Button
 
     private lateinit var lbllocation: TextView
 
@@ -62,6 +64,13 @@ class CurrentLoationWeather : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_loation_weather)
+
+        button = findViewById<Button>(R.id.btnFindWeather)
+        button.setOnClickListener {
+            val Intent =  Intent(this,DifferentLocationWeather::class.java)
+            startActivity(Intent)
+        }
+
 
         forecastRecyclerView = findViewById(R.id.forcast)
         forecastRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
