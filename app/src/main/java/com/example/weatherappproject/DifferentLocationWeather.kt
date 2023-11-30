@@ -1,13 +1,9 @@
 package com.example.weatherappproject
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ImageView
@@ -16,22 +12,17 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class DifferentLocationWeather : AppCompatActivity() {
@@ -173,6 +164,7 @@ class DifferentLocationWeather : AppCompatActivity() {
         }
     }
     private fun fetchForecastData(cityName: String) {
+
         val apiKey = "238edaf81a5f3ab094c958d2b5caf7f0"
         val forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=$cityName&appid=$apiKey"
 
@@ -190,40 +182,50 @@ class DifferentLocationWeather : AppCompatActivity() {
 
                 val forecastJsonArray = JSONObject(stringBuilder.toString()).getJSONArray("list")
 
+
                 val forecastList = mutableListOf<ForecastModel>()
 
-                // Get the current date and time
                 val currentDate = Calendar.getInstance()
                 currentDate.timeInMillis = System.currentTimeMillis()
 
                 for (i in 0 until forecastJsonArray.length()) {
                     val forecastJson = forecastJsonArray.getJSONObject(i)
 
-                    val forecastTimestamp = forecastJson.getLong("dt") * 1000
-                    val forecastDate = Calendar.getInstance()
-                    forecastDate.timeInMillis = forecastTimestamp
+                    val forecastDateTime = forecastJson.getString("dt_txt")
+                    val forecastDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(forecastDateTime)
 
-                    // Check if the forecast time is 10 AM and if it's a future date
-                    if (forecastDate.get(Calendar.HOUR_OF_DAY) == 10 && forecastDate.after(currentDate) && forecastList.size < 5) {
-                        val date = Date(forecastTimestamp)
+                    if (forecastDate != null) {
+                        val forecastCalendar = Calendar.getInstance()
+                        forecastCalendar.time = forecastDate
 
-                        // Format the date to get the day of the week
-                        val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
-                        val day = dayFormat.format(date)
-                        val iconUrl =
-                            "https://openweathermap.org/img/w/${forecastJson.getJSONArray("weather").getJSONObject(0).getString("icon")}.png"
-                        val temperatureKelvin = forecastJson.getJSONObject("main").getDouble("temp")
-                        val temperatureCelsius = temperatureKelvin - 273.15
-                        val formattedTemperature = "${String.format("%.2f", temperatureCelsius)} °C"
-                        val description = forecastJson.getJSONArray("weather").getJSONObject(0).getString("description")
+                        if (forecastCalendar.get(Calendar.HOUR_OF_DAY) == 9) {
+                            val day = forecastDate?.let { SimpleDateFormat("EEEE", Locale.getDefault()).format(it) }
+                            val temperature = String.format(
+                                "%.1f",
+                                forecastJson.getJSONObject("main").getString("temp").toDouble() - 273.15
+                            ) + " °C"
+                            val description=
+                                forecastJson.getJSONArray("weather").getJSONObject(0)
+                                    .getString("description")
+                            val iconCode =
+                                forecastJson.getJSONArray("weather").getJSONObject(0)
+                                    .getString("icon")
+                            val imageURL = "https://openweathermap.org/img/w/$iconCode.png"
 
-                        val forecastModel = ForecastModel(day, iconUrl, formattedTemperature, description)
-                        forecastList.add(forecastModel)
+                            forecastList .add(
+                                ForecastModel(
+                                    day,
+                                    imageURL,
+                                    temperature,
+                                    description
+                                )
+                            )
+                        }
                     }
+
                 }
 
                 runOnUiThread {
-                    // Create and set adapter for the forecast RecyclerView
                     val forecastAdapter = ForecastAdapter(forecastList)
                     forecastRecyclerView.adapter = forecastAdapter
                 }
@@ -233,5 +235,6 @@ class DifferentLocationWeather : AppCompatActivity() {
         }.start()
     }
 
-
 }
+
+

@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -201,39 +202,50 @@ class CurrentLoationWeather : AppCompatActivity() {
 
                 val forecastJsonArray = JSONObject(stringBuilder.toString()).getJSONArray("list")
 
+
                 val forecastList = mutableListOf<ForecastModel>()
 
-                // Get the current date in milliseconds
-                val currentDateMillis = System.currentTimeMillis()
+                val currentDate = Calendar.getInstance()
+                currentDate.timeInMillis = System.currentTimeMillis()
 
                 for (i in 0 until forecastJsonArray.length()) {
                     val forecastJson = forecastJsonArray.getJSONObject(i)
 
-                    val forecastTimestamp = forecastJson.getLong("dt") * 1000
+                    val forecastDateTime = forecastJson.getString("dt_txt")
+                    val forecastDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(forecastDateTime)
 
-                    if (forecastTimestamp >= currentDateMillis && forecastList.size < 5) {
-                        val date = Date(forecastTimestamp)
+                    if (forecastDate != null) {
+                        val forecastCalendar = Calendar.getInstance()
+                        forecastCalendar.time = forecastDate
 
+                        if (forecastCalendar.get(Calendar.HOUR_OF_DAY) == 9) {
+                            val day = forecastDate?.let { SimpleDateFormat("EEEE", Locale.getDefault()).format(it) }
+                            val temperature = String.format(
+                                "%.1f",
+                                forecastJson.getJSONObject("main").getString("temp").toDouble() - 273.15
+                            ) + " °C"
+                            val description=
+                                forecastJson.getJSONArray("weather").getJSONObject(0)
+                                    .getString("description")
+                            val iconCode =
+                                forecastJson.getJSONArray("weather").getJSONObject(0)
+                                    .getString("icon")
+                            val imageURL = "https://openweathermap.org/img/w/$iconCode.png"
 
-                        // Format the date to get the day of the week
-                        val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
-                        val day = dayFormat.format(date)
-                        val iconUrl = "https://openweathermap.org/img/w/${forecastJson.getJSONArray("weather").getJSONObject(0).getString("icon")}.png"
-                        val temperature = "${forecastJson.getJSONObject("main").getDouble("temp")} °C"
-                        val description = forecastJson.getJSONArray("weather").getJSONObject(0).getString("description")
-
-                        val temperatureKelvin = forecastJson.getJSONObject("main").getDouble("temp")
-                        val temperatureCelsius = temperatureKelvin - 273.15
-                        val formattedTemperature = "${String.format("%.2f", temperatureCelsius)} °C"
-
-                        val forecastModel = ForecastModel(day, iconUrl, formattedTemperature, description)
-                        forecastList.add(forecastModel)
+                            forecastList .add(
+                                ForecastModel(
+                                    day,
+                                    imageURL,
+                                    temperature,
+                                    description
+                                )
+                            )
+                        }
                     }
 
                 }
 
                 runOnUiThread {
-                    // Create and set adapter for the forecast RecyclerView
                     val forecastAdapter = ForecastAdapter(forecastList)
                     forecastRecyclerView.adapter = forecastAdapter
                 }
