@@ -1,9 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DifferentLocationWeather">
+    android:orientation="vertical"
+    tools:context=".CurrentLoationWeather"
+    android:background="@color/bgcolor">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/idLLEdt"
+        android:layout_below="@+id/idTVCityName"
+        android:weightSum="5"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idTILCity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="4.5"
+            android:background="@android:color/transparent"
+            android:hint="Enter City Name"
+            android:padding="5dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:importantForAutofill="no"
+                android:id="@+id/idEdtCity"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/idIVSearch"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_search_24"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/idLbllocation"
+        android:gravity="center"
+        android:text="City Name"
+        android:textColor="@color/textColor"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center"
+        android:text="30 'C"
+        android:id="@+id/idTemp"
+        android:textColor="@color/textColor"
+        android:textSize="80dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="Description"
+        android:id="@+id/idDescription"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/textColor"/>
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="120dp"
+        android:id="@+id/idImgIcon"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/textColor"
+        android:text="Humidity"
+        android:id="@+id/idHumidity"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Preasure"
+        android:id="@+id/idPressure"
+        android:textColor="@color/textColor"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/textColor"
+        android:text="Wind Speed"
+        android:id="@+id/idWindSpeed"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
