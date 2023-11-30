@@ -45,6 +45,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
 
 
     testImplementation("junit:junit:4.13.2")
