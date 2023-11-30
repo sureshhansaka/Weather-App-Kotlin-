@@ -1,9 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CurrentLoationWeather">
+    android:orientation="vertical"
+    tools:context=".CurrentLoationWeather"
+    android:background="@color/bgcolor">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="ClimaCast"
+        android:textColor="@color/textColor"
+        android:textSize="30dp"
+        android:fontFamily="serif"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/lbllocation"
+        android:gravity="center"
+        android:text="jaffna"
+        android:textColor="@color/textColor"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center"
+        android:text="30 'C"
+        android:id="@+id/temp"
+        android:textColor="@color/textColor"
+        android:textSize="80dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="Description"
+        android:id="@+id/description"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/textColor"/>
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="120dp"
+        android:id="@+id/imgIcon"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/textColor"
+        android:text="Humidity"
+        android:id="@+id/humidity"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Preasure"
+        android:id="@+id/pressure"
+        android:textColor="@color/textColor"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/textColor"
+        android:text="Wind Speed"
+        android:id="@+id/windSpeed"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
