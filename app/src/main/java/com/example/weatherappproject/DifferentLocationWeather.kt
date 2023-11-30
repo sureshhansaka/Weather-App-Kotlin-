@@ -5,10 +5,11 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -60,6 +61,24 @@ class DifferentLocationWeather : AppCompatActivity() {
 
 
         CheckPermission()
+        // Adding TextWatcher to TextInputEditText
+        cityEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val cityName = s.toString()
+                if (cityName.isNotEmpty()) {
+                    accessLocation(cityName)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed for this example
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed for this example
+            }
+        })
+
     }
     fun CheckPermission(){
 
@@ -71,22 +90,27 @@ class DifferentLocationWeather : AppCompatActivity() {
         }
     }
     @SuppressLint("MissingPermission")
-    fun accessLocation(){
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,100).build()
+    fun accessLocation(cityName: String? = null) {
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100).build()
 
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 p0.locations.lastOrNull()?.let { location ->
                     fetchLocationName(location.latitude, location.longitude)
-                    fetchWeatherData(location.latitude, location.longitude)
+                    fetchWeatherData(cityName ?: "", location.latitude, location.longitude)
                 }
             }
         }
-        locationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
-    }
-    private fun fetchWeatherData(cityName : String) {
 
+        if (cityName.isNullOrEmpty()) {
+            locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        } else {
+            // If cityName is provided, skip location updates and directly fetch weather data for the city
+            fetchWeatherData(cityName)
+        }
+    }
+    private fun fetchWeatherData(cityName: String, latitude: Double, longitude: Double) {
         val apiKey = "39038539455c25ce4322edfa3af922bf"
         val apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$apiKey"
 
@@ -153,4 +177,6 @@ class DifferentLocationWeather : AppCompatActivity() {
             lbllocation.text = "Error fetching location name"
         }
     }
+
+
 }
