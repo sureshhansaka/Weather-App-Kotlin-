@@ -25,6 +25,8 @@ import java.net.URL
 
 import android.location.Address
 import android.location.Geocoder
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import java.io.IOException
 import java.util.Locale
@@ -32,13 +34,17 @@ import java.util.Locale
 class CurrentLoationWeather : AppCompatActivity() {
 
 
+    private lateinit var forecastRecyclerView: RecyclerView
+
     lateinit var locationRequest: LocationRequest
 
     val locationClient : FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
     }
 
-    var currentLocation : Location? = null
+    private var currentLocation : Location? = null
+
+
 
     private lateinit var lbllocation: TextView
 
@@ -53,6 +59,11 @@ class CurrentLoationWeather : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_loation_weather)
+
+        forecastRecyclerView = findViewById(R.id.forcast)
+        forecastRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        fetchForecastData(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0)
 
         lbllocation = findViewById(R.id.lbllocation)
 
@@ -132,6 +143,12 @@ class CurrentLoationWeather : AppCompatActivity() {
         temp.text = "$weatherTemp °C"
         windSpeed.text = "Wind Speed: $weatherWindSpeed m/s"
 
+        val weatherTempKelvin = jsonResponse.getJSONObject("main").getDouble("temp")
+        val weatherTempCelsius = weatherTempKelvin - 273.15
+
+        // Update UI with weather details
+        temp.text = "${String.format("%.2f", weatherTempCelsius)} °C"
+
         val imageURL = "https://openweathermap.org/img/w/" + jsonResponse.getJSONArray("weather").getJSONObject(0).getString("icon")+".png"
 
         Picasso.get().load(imageURL).into(imgIcon)
@@ -158,5 +175,54 @@ class CurrentLoationWeather : AppCompatActivity() {
             // Handle the exception
             lbllocation.text = "Error fetching location name"
         }
+    }
+
+    private fun fetchForecastData(latitude: Double, longitude: Double) {
+        // Use a forecast API endpoint to get the forecast data
+        // Modify the URL and parsing logic accordingly
+
+        // Sample URL for forecast
+        val apiKey = "39038539455c25ce4322edfa3af922bf"
+        val forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey"
+
+        Thread {
+            try {
+                val url = URL(forecastApiUrl)
+                val urlConnection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                val inputStream = urlConnection.inputStream
+                val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+                val stringBuilder = StringBuilder()
+
+                bufferedReader.forEachLine {
+                    stringBuilder.append(it)
+                }
+
+                val forecastJsonArray = JSONObject(stringBuilder.toString()).getJSONArray("list")
+
+                val forecastList = mutableListOf<ForecastModel>()
+
+                for (i in 0 until forecastJsonArray.length()) {
+                    val forecastJson = forecastJsonArray.getJSONObject(i)
+
+                    // Parse forecast data and create ForecastModel objects
+                    val day = "Day" // Replace this with actual day data
+                    val iconUrl = "https://openweathermap.org/img/w/${forecastJson.getJSONArray("weather").getJSONObject(0).getString("icon")}.png"
+                    val temperature = "${forecastJson.getJSONObject("main").getDouble("temp")} °C"
+                    val description = forecastJson.getJSONArray("weather").getJSONObject(0).getString("description")
+
+                    val forecastModel = ForecastModel(day, iconUrl, temperature, description)
+                    forecastList.add(forecastModel)
+
+                }
+
+                runOnUiThread {
+                    // Create and set adapter for the forecast RecyclerView
+                    val forecastAdapter = ForecastAdapter(forecastList)
+                    forecastRecyclerView.adapter = forecastAdapter
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 }

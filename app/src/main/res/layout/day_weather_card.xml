@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="10dp">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/day"
+            android:text="Day"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginTop="2dp"
+            android:id="@+id/imgIconNew"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/tempreture"
+            android:text="Temp"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/descriptionNew"
+            android:text="Description"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_marginTop="2dp"
+            />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
