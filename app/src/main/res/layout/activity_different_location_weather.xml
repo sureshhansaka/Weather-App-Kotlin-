@@ -50,7 +50,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/baseline_search_24"
+            android:src="@drawable/baseline_search"
             app:tint="@color/white" />
 
     </LinearLayout>
