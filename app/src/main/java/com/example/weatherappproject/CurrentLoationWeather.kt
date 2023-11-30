@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class CurrentLoationWeather : AppCompatActivity() {
@@ -201,17 +203,32 @@ class CurrentLoationWeather : AppCompatActivity() {
 
                 val forecastList = mutableListOf<ForecastModel>()
 
+                // Get the current date in milliseconds
+                val currentDateMillis = System.currentTimeMillis()
+
                 for (i in 0 until forecastJsonArray.length()) {
                     val forecastJson = forecastJsonArray.getJSONObject(i)
 
-                    // Parse forecast data and create ForecastModel objects
-                    val day = "Day" // Replace this with actual day data
-                    val iconUrl = "https://openweathermap.org/img/w/${forecastJson.getJSONArray("weather").getJSONObject(0).getString("icon")}.png"
-                    val temperature = "${forecastJson.getJSONObject("main").getDouble("temp")} °C"
-                    val description = forecastJson.getJSONArray("weather").getJSONObject(0).getString("description")
+                    val forecastTimestamp = forecastJson.getLong("dt") * 1000
 
-                    val forecastModel = ForecastModel(day, iconUrl, temperature, description)
-                    forecastList.add(forecastModel)
+                    if (forecastTimestamp >= currentDateMillis && forecastList.size < 5) {
+                        val date = Date(forecastTimestamp)
+
+
+                        // Format the date to get the day of the week
+                        val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+                        val day = dayFormat.format(date)
+                        val iconUrl = "https://openweathermap.org/img/w/${forecastJson.getJSONArray("weather").getJSONObject(0).getString("icon")}.png"
+                        val temperature = "${forecastJson.getJSONObject("main").getDouble("temp")} °C"
+                        val description = forecastJson.getJSONArray("weather").getJSONObject(0).getString("description")
+
+                        val temperatureKelvin = forecastJson.getJSONObject("main").getDouble("temp")
+                        val temperatureCelsius = temperatureKelvin - 273.15
+                        val formattedTemperature = "${String.format("%.2f", temperatureCelsius)} °C"
+
+                        val forecastModel = ForecastModel(day, iconUrl, formattedTemperature, description)
+                        forecastList.add(forecastModel)
+                    }
 
                 }
 
