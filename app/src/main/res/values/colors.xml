@@ -6,6 +6,7 @@
     <color name="bgcolor">#0A0B3D</color>
     <color name="bgcolor2">#052B03</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="btn">#26FFFFFF</color>
 
 
     <color name="purple_200">#FFBB86FC</color>
