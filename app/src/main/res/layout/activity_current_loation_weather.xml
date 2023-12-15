@@ -8,6 +8,17 @@
     tools:context=".CurrentLoationWeather"
     android:background="@color/bgcolor">
 
+    <Button
+        android:id="@+id/btnFindWeather"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
+        android:layout_gravity="right"
+        android:backgroundTint="@color/btn"
+        android:text="FIND WEATHER"
+        android:textColor="@color/textColor"
+
+        app:cornerRadius="0dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -17,15 +28,7 @@
         android:fontFamily="serif"
         android:gravity="center"/>
 
-    <Button
-        android:layout_width="148dp"
-        android:layout_height="37dp"
-        android:text="FIND WEATHER"
-        android:textColor="@color/textColor"
-        android:id="@+id/btnFindWeather"
-        android:layout_marginLeft="269dp"
-        android:background="@color/textColor"
-        />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -87,6 +90,7 @@
         android:gravity="center"
         android:textSize="25dp" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,5 +98,6 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:id="@+id/forcast"/>
+
 
 </LinearLayout>

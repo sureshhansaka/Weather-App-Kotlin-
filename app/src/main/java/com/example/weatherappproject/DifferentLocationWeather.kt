@@ -1,11 +1,13 @@
 package com.example.weatherappproject
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -41,11 +43,18 @@ class DifferentLocationWeather : AppCompatActivity() {
     private lateinit var temp: TextView
     private lateinit var windSpeed: TextView
     private lateinit var imgIcon: ImageView
+    private lateinit var button:Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_different_location_weather)
+
+        button = findViewById<Button>(R.id.btnCurrentWeather)
+        button.setOnClickListener {
+            val Intent =  Intent(this,CurrentLoationWeather::class.java)
+            startActivity(Intent)
+        }
 
 
 
